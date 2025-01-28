@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="stylea.css">
+   <link rel="stylesheet" href="fontawesome-free-5.15.3-web/css/all.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="background-text">
+            <h2>Book a <span>Cab Now</span></h2>
+        </div>
+        <header class="header">
+            <a href="#" id="logo"><img src="images/CabHUB.png" alt="CabHUB Logo"></a>
+            <nav class="navbar">
+                <a href="#">Home</a>
+                <a href="#">Gallery</a>
+                <a href="#">Blog</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </nav>
+            <a href="#" id="menu-bars" class="fas fa-bars"></a>
+        </header>
+        <div class="taxi-image">
+            <img src="images/carmain.png" alt="Main Taxi Image">
+        </div>
+    </div>
+
+<!-- Home Section -->
+<div class="home-container">
+    <div class="home-content">
+        <div class="inner-content">
+            <h3>Best in the City</h3>
+            <h2>Trusted Cab Service in the County</h2>
+            <p>We offer reliable and affordable cab services tailored to your needs. With experienced drivers and comfortable vehicles, we ensure a seamless travel experience. Trust us for your transportation needs.</p>
+            <a href="#" class="booknow">Book Now</a>
+        </div>
+        <div class="inner-content">
+           <div class="contact-form">
+               <div class="form-heading">
+                   <h1>Book a Cab</h1>
+               </div>
+               <div class="form-fields">
+                   <input type="text" placeholder="Name">
+                   <input type="text" placeholder="Phone">
+                   <input type="text" placeholder="Pickup Time">
+                   <input type="text" placeholder="Date">
+                   <input type="text" placeholder="Pickup Location">
+                   <input type="text" placeholder="Destination">
+               </div>
+               <div class="submit">
+                <a href="#">Submit</a>
+               </div>
+           </div>
+        </div>
+    </div>
+</div>
+<!-- Home Section End -->
+
+<!-- Our Tariff -->
+<div class="main-tariff">
+    <h1>Our <span>Tariff</span></h1>
+    <div class="inner-tariff">
+        <div class="tariff-container">
+            <div class="inner-box">
+                <img src="images/image1.png" alt="Economy Class">
+                <h2>Economy Class</h2>
+                <p>Affordable and comfortable rides designed to meet your basic travel needs. Enjoy efficient service without compromising on quality.</p>
+                <h3>Price: $3 /-</h3>
+                <a href="#">Order Now</a>
+            </div>
+        </div>
+
+        <div class="tariff-container">
+            <div class="inner-box">
+                <img src="images/image1.png" alt="Premium Class">
+                <h2 class="heading-yellow">Premium Class</h2>
+                <p>Experience luxury and comfort with our premium rides. Perfect for special occasions or business travel.</p>
+                <h3 class="yellow-section">Price: $6 /-</h3>
+                <a href="#" class="btn-yellow">Order Now</a>
+            </div>
+        </div>
+
+        <div class="tariff-container">
+            <div class="inner-box">
+                <img src="images/image1.png" alt="Business Class">
+                <h2>Business Class</h2>
+                <p>Our business class offers top-notch services tailored for corporate clients, ensuring a smooth and professional experience.</p>
+                <h3>Price: $10 /-</h3>
+                <a href="#">Order Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Our Tariff End -->
+
+<!-- Fast Booking -->
+<div class="fast-booking">
+    <h1 class="fast-heading">We Do Our Best</h1>
+    <h2>Better Than You Wish</h2>
+    <div class="inner-fast">
+        <div class="booking-content">
+            <div class="icon-fast">
+                <span><i class="fas fa-star"></i></span>
+            </div>
+            <div class="inner-fast-text">
+                <h1>Fast Booking</h1>
+                <p>Book your cab in just a few clicks. Enjoy a hassle-free experience with our user-friendly booking system.</p>
+            </div>
+        </div>
+        <div class="booking-content">
+            <div class="icon-fast">
+                <span><i class="fas fa-map-marker-alt"></i></span>
+            </div>
+            <div class="inner-fast-text">
+                <h1>Accurate Tracking</h1>
+                <p>Track your ride in real-time. Stay informed about your cab's location and estimated arrival time.</p>
+            </div>
+        </div>
+        <div class="booking-content">
+            <div class="icon-fast">
+                <span><i class="fas fa-clock"></i></span>
+            </div>
+            <div class="inner-fast-text">
+                <h1>On-Time Service</h1>
+                <p>Our cabs are punctual and reliable, ensuring you reach your destination on time, every time.</p>
+            </div>
+        </div>
+        <div class="booking-content">
+            <div class="icon-fast">
+                <span><i class="fas fa-car"></i></span>
+            </div>
+            <div class="inner-fast-text">
+                <h1>Comfortable Rides</h1>
+                <p>Enjoy a smooth and comfortable ride with our well-maintained vehicles and professional drivers.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fast Booking End -->
+
+<!-- Testimonials -->
+<div class="testimonials">
+    <h1 class="heading-test">Happy Clients</h1>
+    <div class="main-testimonials">
+        <div class="inner-test">
+            <p>"The best cab service I have ever used! The booking process was simple, and the ride was extremely comfortable. Highly recommended!"</p>
+            <div class="clients">
+                <img src="images/jhon.png" alt="Client Image">
+                <h1>John Doe</h1>
+            </div>
+        </div>
+        <div class="inner-test">
+            <p>"Reliable and professional service. The driver was on time, and the ride was smooth. Will definitely book again!"</p>
+            <div class="clients">
+                <img src="images/jhon.png" alt="Client Image">
+                <h1>Jane Smith</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Testimonials End -->
+
+<script src="script.js"></script>
+</body>
+</html>

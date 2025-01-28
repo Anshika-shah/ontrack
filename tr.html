@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Ride</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+
+        .container {
+            margin: 20px;
+        }
+
+        .btn {
+            margin-top: 10px;
+        }
+
+        .leaflet-popup-content-wrapper {
+            text-align: center;
+        }
+
+        #distance-time {
+            margin-top: 20px;
+        }
+
+        #distance-time span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Track Your Ride</h2>
+        <form id="locationForm">
+            <div>
+                <label for="pickup">Pickup Location:</label>
+                <input type="text" id="pickup" class="form-control" placeholder="Enter pickup location" value="" disabled>
+            </div>
+            <br>
+            <div>
+                <label for="dropoff">Drop-off Location:</label>
+                <input type="text" id="dropoff" class="form-control" placeholder="Enter drop-off location" value="" disabled>
+            </div>
+            <br>
+            <button type="button" class="btn btn-primary" onclick="displayRoute()">Show Route</button>
+            <button type="button" class="btn btn-secondary" onclick="trackCurrentLocation()">Track Current Location</button>
+        </form>
+
+        <div id="distance-time">
+            <p><span>Distance:</span> <span id="distance">N/A</span></p>
+            <p><span>Estimated Time:</span> <span id="time">N/A</span></p>
+        </div>
+        <div id="map"></div>
+        <br>
+        <br>
+    </div>
+
+    <script>
+        let map = L.map('map').setView([26.4499, 80.3319], 13); // Default to Kanpur, India
+
+        // Load OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+        }).addTo(map);
+
+        let pickupMarker;
+        let dropoffMarker;
+        let routeLine;
+
+        // Define a custom car icon
+        const carIcon = L.icon({
+            iconUrl: 'car.png', // Replace with your car icon URL
+            iconSize: [30, 30], // Set icon size
+            iconAnchor: [15, 30], // Anchor the icon at the bottom-center
+            popupAnchor: [0, -30] // Adjust popup position
+        });
+
+        // Get pickup and dropoff locations from localStorage
+        const pickupLocation = localStorage.getItem('pickupLocation');
+        const dropoffLocation = localStorage.getItem('dropoffLocation');
+
+        if (pickupLocation && dropoffLocation) {
+            document.getElementById('pickup').value = pickupLocation;
+            document.getElementById('dropoff').value = dropoffLocation;
+
+            // Display the route immediately
+            displayRoute();
+        } else {
+            alert("No pickup or drop-off location found.");
+        }
+
+        // Display route between pickup and drop-off locations
+        function displayRoute() {
+            const pickup = document.getElementById("pickup").value;
+            const dropoff = document.getElementById("dropoff").value;
+
+            if (pickup && dropoff) {
+                // Use Nominatim for geocoding
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(pickup)}`)
+                    .then((res) => res.json())
+                    .then((pickupData) => {
+                        const pickupLatLng = [pickupData[0].lat, pickupData[0].lon];
+                        pickupMarker = L.marker(pickupLatLng, { icon: carIcon }).addTo(map).bindPopup("Pickup Location").openPopup();
+
+                        return fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(dropoff)}`);
+                    })
+                    .then((res) => res.json())
+                    .then((dropoffData) => {
+                        const dropoffLatLng = [dropoffData[0].lat, dropoffData[0].lon];
+                        dropoffMarker = L.marker(dropoffLatLng).addTo(map).bindPopup("Drop-off Location").openPopup();
+
+                        // Fetch the route using OSRM API
+                        const osrmApiUrl = `https://router.project-osrm.org/route/v1/driving/${pickupMarker.getLatLng().lng},${pickupMarker.getLatLng().lat};${dropoffMarker.getLatLng().lng},${dropoffMarker.getLatLng().lat}?overview=full&geometries=geojson`;
+
+                        fetch(osrmApiUrl)
+                            .then((res) => res.json())
+                            .then((routeData) => {
+                                const coordinates = routeData.routes[0].geometry.coordinates.map((point) => [point[1], point[0]]);
+                                if (routeLine) map.removeLayer(routeLine);
+                                routeLine = L.polyline(coordinates, { color: 'blue' }).addTo(map);
+                                map.fitBounds(routeLine.getBounds());
+
+                                // Extract distance and time
+                                const distance = routeData.routes[0].legs[0].distance / 1000; // Convert to kilometers
+                                const time = routeData.routes[0].legs[0].duration / 60; // Convert to minutes
+
+                                // Convert time to hours and minutes
+                                const hours = Math.floor(time / 60);
+                                const minutes = Math.round(time % 60);
+
+                                // Display the distance and time
+                                document.getElementById("distance").innerText = `${distance.toFixed(2)} km`;
+                                document.getElementById("time").innerText = `${hours} hr ${minutes} min`;
+                            });
+                    })
+                    .catch((error) => {
+                        alert("Error finding locations or routes: " + error.message);
+                    });
+            } else {
+                alert("Please enter both pickup and drop-off locations.");
+            }
+        }
+
+        // Track the current location of the user
+        function trackCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(
+                    (position) => {
+                        const currentLocation = [position.coords.latitude, position.coords.longitude];
+                        L.marker(currentLocation, {
+                            icon: L.icon({
+                                iconUrl: 'https://cdn-icons-png.flaticon.com/512/1946/1946436.png', // Replace with your car icon
+                                iconSize: [50, 50],
+                            }),
+                        })
+                            .addTo(map)
+                            .bindPopup("Your Current Location")
+                            .openPopup();
+                        map.setView(currentLocation, 14);
+                    },
+                    () => {
+                        alert("Unable to fetch location. Please enable GPS.");
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cab Booking Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        header{
+            color:rgb(238, 241, 237);
+           }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        
+        .hero {
+            background: url("a5.jpg") no-repeat center center/cover;
+            height: 400px;
+            color: rgb(245, 248, 58);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            
+        }
+        
+        .features {
+            padding: 2rem 0;
+        }
+
+        .features img {
+            width: 100%;
+            height: auto;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <header class="bg-dark text-rgb(236, 240, 32)">
+        <div class="container d-flex justify-content-between">
+            <h1>OnTrack</h1>
+            <nav>
+                <a href="index.html" class="text-white me-3">Home</a>
+                <a href="features.html" class="text-white me-3">Features</a>
+                <a href="booking.html" class="text-white">Book Now</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Your Ride, Your Way</h1>
+    </section>
+
+    <section class="features container text-center my-5" id="features";>
+        <h2>Why Choose Us?</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <img src="a7.jpg" alt="Safe Rides">
+                <h3>Safe Rides</h3>
+                <p>Your safety is our priority.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="a8.jpg" alt="Affordable Prices">
+                <h3>Affordable Prices</h3>
+                <p>Best value for your money.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="a10.jpg" alt="24/7 Support">
+                <h3>24/7 Support</h3>
+                <p>We're here when you need us.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="booking bg-light py-5" id="booking";>
+        <div class="container">
+            <h2 class="text-center">Book a Ride</h2>
+            <form id="bookingForm" class="mt-4">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="pickup">Pickup Location</label>
+                        <input type="text" id="pickup" name="pickup" class="form-control" placeholder="Enter location" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="dropoff">Drop-off Location</label>
+                        <input type="text" id="dropoff" name="dropoff" class="form-control" placeholder="Enter location" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="time">Time</label>
+                        <input type="time" id="time" name="time" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                      <label for="paymentMethod">Payment Method</label>
+                      <select id="paymentMethod" name="paymentMethod" class="form-control" required>
+                          <option value="" disabled selected>Select Payment Method</option>
+                          <option value="Credit/Debit Card">Credit/Debit Card</option>
+                          <option value="UPI">UPI</option>
+                          <option value="Digital Banking">Digital Banking</option>
+                      </select>
+                  </div>
+              </div>
+              <div id="upiQRCode" class="text-center mt-3" style="display: none;">
+                <p>Scan the QR code to pay:</p>
+                <img src="qr.jpg" alt="UPI QR Code" style="max-width: 150px;">
+            </div>
+            
+              
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary" onclick="triggerBookingModal()">Book Now</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    
+     <!-- Booking Confirmation Modal -->
+     <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="confirmationModalLabel">Booking Confirmation</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <p><strong>Pickup Location:</strong> <span id="confirmPickup"></span></p>
+                  <p><strong>Drop-off Location:</strong> <span id="confirmDropoff"></span></p>
+                  <p><strong>Date:</strong> <span id="confirmDate"></span></p>
+                  <p><strong>Time:</strong> <span id="confirmTime"></span></p>
+                  <p><strong>Fare Price:</strong> ₹<span id="confirmFare"></span></p>
+                  <p><strong>Payment Method:</strong> <span id="confirmPaymentMethod"></span></p>
+                  <div id="upiQRCode" class="text-center mt-3" style="display: none;">
+                    <p>Scan the QR code to pay:</p>
+                    <img src="qr.jpg" alt="UPI QR Code" style="max-width: 150px;">
+                </div>
+                  <p>Your booking has been successfully confirmed. Thank you for choosing OnTrack!</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="saveBookingDetails()">Track ride</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <script>
+    function triggerBookingModal() {
+      // Get input values
+      const pickup = document.getElementById('pickup').value;
+      const dropoff = document.getElementById('dropoff').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      const paymentMethod = document.getElementById('paymentMethod').value;
+  
+      // Calculate fare price (static for now)
+      const fare = calculateFare(pickup, dropoff);
+  
+      // Validate input fields
+      if (!pickup || !dropoff || !date || !time || !paymentMethod) {
+          alert("Please fill out all fields, including payment method, before booking.");
+          return;
+      }
+  
+      // Populate modal with values
+      document.getElementById('confirmPickup').textContent = pickup;
+      document.getElementById('confirmDropoff').textContent = dropoff;
+      document.getElementById('confirmDate').textContent = date;
+      document.getElementById('confirmTime').textContent = time;
+      document.getElementById('confirmFare').textContent = fare;
+      document.getElementById('confirmPaymentMethod').textContent = paymentMethod;
+  
+      // Handle UPI QR Code visibility
+      const upiQRCodeDiv = document.getElementById('upiQRCode');
+      if (paymentMethod === "UPI") {
+          upiQRCodeDiv.style.display = "block";
+      } else {
+          upiQRCodeDiv.style.display = "none";
+      }
+  
+      // Show modal
+      const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+      confirmationModal.show();
+  }
+  
+  
+
+      function calculateFare(pickup, dropoff) {
+          // Simple static fare calculation example
+          // In reality, you could calculate based on distance or use an API for live prices
+          const baseFare = 50; // Base fare in INR
+          const perKmRate = 10; // Per kilometer rate in INR
+          const distance = Math.random() * 10 + 1; // Simulating distance (between 1 and 10 km)
+
+          const totalFare = baseFare + (perKmRate * distance);
+          return totalFare.toFixed(2); // Return the fare rounded to two decimal places
+      }
+
+      function saveBookingDetails() {
+          const pickup = document.getElementById('pickup').value;
+          const dropoff = document.getElementById('dropoff').value;
+
+          // Store the pickup and dropoff locations in localStorage
+          if (pickup && dropoff) {
+              localStorage.setItem('pickupLocation', pickup);
+              localStorage.setItem('dropoffLocation', dropoff);
+
+              // Redirect to the tracking page (map page)
+              window.location.href = 'tr.html';
+          } else {
+              alert("Please enter both pickup and drop-off locations.");
+          }
+      }
+    
+  </script>
+
+  
+   
+    </section>
+    <section>
+    <!-- our taxis section end -->
+    <!-- why ride section start -->
+    <div id="booking" class="ride_section layout_padding">
+        <div class="container">
+          <div class="ride_main">
+            
+            <h1 class="ride_text " style="font-family: Georgia, 'Times New Roman', Times, serif;"><u>Why Ride </u><span style=" color: #f4db31 ;"><u>With taxi</u></span></h1>
+            
+            <br>
+        </div>
+          </div>
+      </div>
+      <div class="ride_section_2 layout_padding">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="image_3"><a href="py.html";><img src="a11.jpg"></a></div>
+              <br>
+            </div>
+            <div class="col-sm-8">
+              <h1 class="cabe_text">Taxi for Every Pocket</h1>
+              <p class="long_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as It is a long established fact that a reader will be distracted by the readable c</p>
+              <div class="book_bt"><a href="booking.html">BOOK NOW</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8">
+              <h1 class="secure_text">Secure and Safer Rides</h1>
+              <p class="long_text_2">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as It is a long established fact that a reader will be distracted by the readable c</p>
+              <div class="book_bt_2"><a href="booking.html">BOOK NOW</a></div>
+            </div>
+            <div class="col-sm-4">
+              <div class="image_a11"><a href="#";><img src="a12.jpg" height="200 px" width="300 px"></a></div>
+              <br>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="image_3"><a href="t&t.html";><img src="a13.jpg" height="200 px" width="300 px"></a></div>
+              <br>
+            </div>
+            <div class="col-sm-8">
+              <h1 class="cabe_text">Tours and Travels</h1>
+              <p class="long_text">Your journey begins the moment you step in. Let us drive your adventures.</p>
+              <div class="book_bt"><a href="booking.html">BOOK NOW</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8">
+              <h1 class="secure_text">Luxury Rides</h1>
+              <p class="long_text_2">Redefine your journey with unmatched elegance—ride in luxury, travel in style.</p>
+              <div class="book_bt_2"><a href="booking.html">BOOK NOW</a></div>
+            </div>
+            <div class="col-sm-4">
+              <div class="image_3"><a href="luxuryrides.html";><img src="a14.jpg" height="200 px" width="300 px"></a></div>
+              <br>
+              <br>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- why ride section end -->
+      <!-- location section start -->
+    </section>
+
+    
+  <!-- section footer start -->
+    <div class="section_footer bg-dark text-rgb(241, 241, 237) ">
+      <br>
+      <br>
+      <div class="container"> 
+          <div class="footer_section_2">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-3">
+                  <h2 class="account_text text-light">Address</h2>
+                  <br>
+                  <p class="ipsum_text text-light">123 OnTrack Lane, Cityville, State, 12345 </p>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-3">
+                  <h2 class="account_text text-light">Links</h2>
+                  <div class="image-icon"><img src="bulit-icon.png"><span class="fb_text"><a href="index.html">Home</span></a></div>
+                  <br>
+                <div class="image-icon"><img src="bulit-icon.png"><span class="fb_text"><a href="about.html">About</span></a></div>
+                <br>
+                <div class="image-icon"><img src="bulit-icon.png"><span class="fb_text"><a href="booking.html">Booking</span></a></div>
+                <br>
+                <div class="image-icon"><img src="bulit-icon.png"><span class="fb_text"><a href="contact.html">Contact Us</span></a></div>
+                <br>
+                <br>
+                </div>
+                <br>
+                <div class="col-sm-6 col-md-6 col-lg-3">
+                <h2 class="account_text text-light">Follow Us</h2>
+                <div class="image-icon"><img src="fb-icon.png"><span class="fb_text"><a href="https://www.facebook.com/YourPageName" target="_blank" rel="noopener noreferrer">Facebook</a></span></div>
+                <br>
+                <div class="image-icon"><img src="twitter-icon.png"><span class="fb_text"><a href="https://twitter.com/YourTwitterHandle" target="_blank" rel="noopener noreferrer">Twitter</a></span></div>            
+                <br>
+                <div class="image-icon"><img src="instagram-icon.png"><span class="fb_text"><a href="https://www.instagram.com/YourInstagramHandle" target="_blank" rel="noopener noreferrer">Instagram</a></span></div>
+                <br>
+                <br>
+                <br>
+
+                </div>
+          <div class="col-sm-6 col-md-6 col-lg-3">
+            <h2 class="adderess_text text-light">Newsletter</h2>
+            <form action="/subscribe" method="POST" class="newsletter-form">
+                <div class="form-group">
+                    <input type="email" class="email_text form-control" placeholder="Enter Your Email" name="email" required>
+                    <br>
+                </div>
+                <button type="submit" class="subscribr_bt btn btn-primary" >SUBSCRIBE</button>
+                <br>
+                <div class="image-icon" ;><a href="subscribe.html" ><span class="fb_text">Subscribe</span></a></div>
+            </form>
+            
+          </div>
+          </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  <!-- section footer end -->
+ 
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
